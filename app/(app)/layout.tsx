@@ -51,9 +51,9 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
         border-transparent dark:border-gray-800
         overflow-hidden whitespace-nowrap
         transition-all duration-300 ease-in-out
-        ${isSidebarOpen ? 'translate-x-0 w-64 px-4 border-r' : '-translate-x-full w-64 px-4 border-r'}
+        ${isSidebarOpen ? 'translate-x-0 w-68 px-4 border-r' : '-translate-x-full w-68 px-4 border-r'}
         md:relative md:translate-x-0 
-        ${isSidebarOpen ? 'md:w-64 md:px-4 md:border-r md:opacity-100' : 'md:w-0 md:px-0 md:border-0 md:opacity-0'}
+        ${isSidebarOpen ? 'md:w-68 md:px-4 md:border-r md:opacity-100' : 'md:w-0 md:px-0 md:border-0 md:opacity-0'}
       `}>
         {/* Top Section */}
         <div>
