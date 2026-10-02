@@ -107,7 +107,7 @@ export default function DocumentsView() {
                         {/* Left side: Icon and Info */}
                         <div className="flex items-center gap-4">
                             {/* PDF Icon SVG */}
-                            <svg className="w-10 h-10 flex-shrink-0" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg className="w-10 h-10 shrink-0" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M6 8C6 5.79086 7.79086 4 10 4H24L34 14V32C34 34.2091 32.2091 36 30 36H10C7.79086 36 6 34.2091 6 32V8Z" className="fill-red-500" />
                                 <path d="M24 4V14H34" className="fill-red-600" />
                                 <text x="20" y="26" fill="white" fontSize="11" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle">PDF</text>
