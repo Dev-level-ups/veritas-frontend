@@ -17,7 +17,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
         setIsSidebarOpen(true);
       }
     };
-    
+
     // Initial check
     handleResize();
 
@@ -25,13 +25,20 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  function truncateText(text: string, maxLength: number): string {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + '...';
+    }
+    return text;
+  }
+
   return (
     <div className='flex h-screen overflow-hidden dark:bg-gray-950'>
-      
+
       {/* Mobile Overlay Backdrop */}
       {isSidebarOpen && (
-        <div 
-          className="fixed inset-0 z-40 bg-gray-900/50 backdrop-blur-sm md:hidden transition-opacity" 
+        <div
+          className="fixed inset-0 z-40 bg-gray-900/50 backdrop-blur-sm md:hidden transition-opacity"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
@@ -39,13 +46,14 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
       {/* Sidebar */}
       <aside className={`
         fixed inset-y-0 left-0 z-50 
-        flex flex-col justify-between w-64 px-4 py-6 
+        flex flex-col justify-between py-6 
         bg-indigo-50 dark:bg-gray-900 font-sans 
-        border-r border-transparent dark:border-gray-800
-        transition-transform duration-300 ease-in-out
-        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+        border-transparent dark:border-gray-800
+        overflow-hidden whitespace-nowrap
+        transition-all duration-300 ease-in-out
+        ${isSidebarOpen ? 'translate-x-0 w-64 px-4 border-r' : '-translate-x-full w-64 px-4 border-r'}
         md:relative md:translate-x-0 
-        ${!isSidebarOpen ? 'md:hidden' : 'md:flex'}
+        ${isSidebarOpen ? 'md:w-64 md:px-4 md:border-r md:opacity-100' : 'md:w-0 md:px-0 md:border-0 md:opacity-0'}
       `}>
         {/* Top Section */}
         <div>
@@ -58,15 +66,15 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
               </svg>
               <span className="text-2xl font-bold text-gray-900 dark:text-white">Veritas</span>
             </div>
-            
+
             {/* Close Button (Visible on both mobile and desktop when sidebar is open) */}
-            <button 
+            <button
               onClick={() => setIsSidebarOpen(false)}
               className="p-1.5 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-indigo-100 dark:hover:bg-gray-800 rounded-lg transition-colors focus:outline-none"
               title="Close Sidebar"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
           </div>
@@ -77,8 +85,8 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
               href="/documents"
               onClick={() => window.innerWidth < 768 && setIsSidebarOpen(false)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors ${pathname === '/documents'
-                  ? 'text-indigo-700 dark:text-indigo-300 bg-indigo-100 dark:bg-indigo-900/50'
-                  : 'text-slate-700 dark:text-slate-300 hover:bg-indigo-100/50 dark:hover:bg-gray-800'
+                ? 'text-indigo-700 dark:text-indigo-300 bg-indigo-100 dark:bg-indigo-900/50'
+                : 'text-slate-700 dark:text-slate-300 hover:bg-indigo-100/50 dark:hover:bg-gray-800'
                 }`}
             >
               <svg className={`w-5 h-5 ${pathname === '/documents' ? '' : 'text-slate-600 dark:text-slate-400'}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -95,30 +103,24 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
               href="/ask"
               onClick={() => window.innerWidth < 768 && setIsSidebarOpen(false)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors ${pathname === '/ask'
-                  ? 'text-indigo-700 dark:text-indigo-300 bg-indigo-100 dark:bg-indigo-900/50'
-                  : 'text-slate-700 dark:text-slate-300 hover:bg-indigo-100/50 dark:hover:bg-gray-800'
+                ? 'text-indigo-700 dark:text-indigo-300 bg-indigo-100 dark:bg-indigo-900/50'
+                : 'text-slate-700 dark:text-slate-300 hover:bg-indigo-100/50 dark:hover:bg-gray-800'
                 }`}
             >
               <svg className={`w-5 h-5 ${pathname === '/ask' ? '' : 'text-slate-600 dark:text-slate-400'}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
               </svg>
-              <span>Ask</span>
+              <span>New chat</span>
             </Link>
 
-            <Link
-              href="/settings"
-              onClick={() => window.innerWidth < 768 && setIsSidebarOpen(false)}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors ${pathname === '/settings'
-                  ? 'text-indigo-700 dark:text-indigo-300 bg-indigo-100 dark:bg-indigo-900/50'
-                  : 'text-slate-700 dark:text-slate-300 hover:bg-indigo-100/50 dark:hover:bg-gray-800'
-                }`}
-            >
-              <svg className={`w-5 h-5 ${pathname === '/settings' ? '' : 'text-slate-600 dark:text-slate-400'}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
-                <circle cx="12" cy="12" r="3" />
-              </svg>
-              <span>Settings</span>
-            </Link>
+            <div className='mt-3'>
+              <h6 className='text-gray-500 text-sm'>Recent</h6>
+              <div className='mt-2'>
+                <Link href={'/ask'} onClick={() => window.innerWidth < 768 && setIsSidebarOpen(false)}>
+                  <div className='text-sm text-gray-700 dark:text-gray-300 truncate w-56'>How does the retrieval process work in Veritas?</div>
+                </Link>
+              </div>
+            </div>
           </nav>
         </div>
 
@@ -129,19 +131,28 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
             JD
           </div>
           {/* User Details */}
-          <div className="flex flex-col">
-            <span className="text-sm font-semibold text-slate-900 dark:text-white">John Doe</span>
-            <span className="text-sm text-slate-500 dark:text-slate-400">john@example.com</span>
+          <div className="flex items-center justify-center space-x-3">
+            <div className='flex flex-col'>
+
+              <span className="text-sm font-semibold text-slate-900 dark:text-white">John Doe</span>
+              <span className="text-sm text-slate-500 dark:text-slate-400">john@example.com</span>
+            </div>
+            <Link href={'/settings'} onClick={() => window.innerWidth < 768 && setIsSidebarOpen(false)}>
+              <svg className={`w-5 h-5 ${pathname === '/settings' ? '' : 'text-slate-600 dark:text-slate-400'}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </Link>
           </div>
         </div>
       </aside>
 
       {/* Main Content Area */}
-      <div className='flex flex-col flex-1 w-full min-w-0 overflow-y-auto bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100'>
-        
+      <div className='relative flex flex-col flex-1 w-full min-w-0 overflow-y-auto bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100'>
+
         {/* Top Header (Shows Hamburger when sidebar is closed) */}
-        <div className={`flex items-center p-4 md:px-8 md:pt-8 md:pb-0 ${isSidebarOpen ? 'md:hidden' : 'flex'}`}>
-          <button 
+        <div className={`flex items-center p-4 md:absolute md:top-6 md:left-6 md:z-10 md:p-0 transition-opacity duration-300 ${isSidebarOpen ? 'opacity-0 pointer-events-none md:opacity-0' : 'opacity-100 md:opacity-100'}`}>
+          <button
             onClick={() => setIsSidebarOpen(true)}
             className="p-2 mr-4 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors focus:outline-none"
             title="Open Sidebar"
@@ -150,7 +161,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
-          
+
           <div className="md:hidden flex items-center gap-2">
             <svg className="w-6 h-6 text-indigo-600 dark:text-indigo-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
