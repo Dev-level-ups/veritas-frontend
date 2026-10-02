@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 
 export function ThemeToggle() {
-    const { theme, setTheme, systemTheme } = useTheme();
+    const { theme, setTheme, resolvedTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
@@ -12,8 +12,6 @@ export function ThemeToggle() {
     }, []);
 
     if (!mounted) {
-        // Matched to the exact dimensions (w-10 = 40px) and border-radius (rounded-lg) 
-        // of the rendered button to prevent Layout Shift
         return (
             <div
                 className="w-10 h-10 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse"
@@ -22,25 +20,21 @@ export function ThemeToggle() {
         );
     }
 
-    // Determine current active theme accounting for 'system' default
-    const currentTheme = theme === "system" ? systemTheme : theme;
-    const isDark = currentTheme === "dark";
+    const isDark = resolvedTheme === 'dark';
 
     return (
         <button
             onClick={() => setTheme(isDark ? "light" : "dark")}
-            className="relative flex items-center justify-center p-2.5 text-gray-500 transition-all rounded-lg hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-300 dark:focus-visible:ring-gray-700 active:scale-95"
+            className="relative flex items-center justify-center p-2.5 text-gray-500 transition-colors rounded-lg hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-300 dark:focus-visible:ring-gray-700 active:opacity-80 w-10 h-10"
             aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
             title={`Switch to ${isDark ? "light" : "dark"} mode`}
         >
-            <SunIcon
-                className={`w-5 h-5 transition-all duration-300 ${isDark ? "-rotate-90 scale-0" : "rotate-0 scale-100"
-                    }`}
-            />
-            <MoonIcon
-                className={`absolute w-5 h-5 transition-all duration-300 ${isDark ? "rotate-0 scale-100" : "rotate-90 scale-0"
-                    }`}
-            />
+            <span className={`absolute flex items-center justify-center transition-all duration-300 ${isDark ? "-rotate-90 scale-0 opacity-0" : "rotate-0 scale-100 opacity-100"}`}>
+                <SunIcon className="w-5 h-5" />
+            </span>
+            <span className={`absolute flex items-center justify-center transition-all duration-300 ${isDark ? "rotate-0 scale-100 opacity-100" : "rotate-90 scale-0 opacity-0"}`}>
+                <MoonIcon className="w-5 h-5" />
+            </span>
 
             {/* Screen reader fallback */}
             <span className="sr-only">Toggle theme</span>
